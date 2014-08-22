@@ -1,0 +1,44 @@
+.gitignore
+
+ifdef CXX
+CXX = @(CXX)
+else
+CXX = clang++
+endif
+
+ifdef CC
+CC = @(CC)
+else
+CC = clang
+endif
+
+ifdef LD
+LD = @(LD)
+else
+LD = $(CXX)
+endif
+
+ifdef AR
+AR = @(AR)
+else
+AR = ar
+endif
+
+TOP = $(TUP_CWD)
+
+CCFLAGS += -Wall -Wextra -pedantic @(CCFLAGS)
+
+CXXFLAGS += -std=c++11 @(CXXFLAGS)
+
+CFLAGS += `pkg-config --cflags glew` -std=c99 @(CFLAGS)
+
+LDFLAGS += `pkg-config --libs glew` @(LDFLAGS)
+
+ifeq ($(CXX),clang++)
+  CXXFLAGS += -fcolor-diagnostics
+endif
+
+!cxx = |> ^o C++ %f^ $(CXX) $(CXXFLAGS) $(CCFLAGS) -c %f -o %o |> %B.o | $(TOP)/<objs>
+!cc = |> ^o C %f^ $(CC) $(CFLAGS) $(CCFLAGS) -c %f -o %o |> %B.o | $(TOP)/<objs>
+!ld = |> ^o LINK %o^ $(LD) %f $(LDFLAGS) -o %o |>
+!ar = |> ^o LINK %o^ $(AR) rcs %o %f |>
