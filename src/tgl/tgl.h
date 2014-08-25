@@ -12,6 +12,7 @@ extern "C" {
 #include "shader.h"
 #include "vao.h"
 #include "quad.h"
+#include "fbo.h"
 
 #ifdef __cplusplus
 }
