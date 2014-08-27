@@ -52,18 +52,35 @@ void tgl_fbo_size_rel(tgl_fbo *self, unsigned target, float w, float h)
     self->targets[target].rheight = h;
 }
 
-void tgl_fbo_texture(tgl_fbo *self, unsigned target, GLenum type, GLenum fmt, GLenum attachment)
+void tgl_fbo_texture(tgl_fbo *self, unsigned target, GLenum type, GLenum ifmt, GLenum fmt, GLenum attachment)
 {
     assert(target < self->num);
-    self->targets[target].target = type;
-    self->targets[target].fmt = fmt;
-    self->targets[target].attach = attachment;
+    tgl_fbo_target *t = &self->targets[target];
+    t->target = type;
+    t->ifmt = ifmt;
+    t->fmt = fmt;
+    t->attach = attachment;
+}
+
+void tgl_fbo_multisample(tgl_fbo *self, unsigned target, unsigned samples, bool fixed)
+{
+    assert(target < self->num);
+    tgl_fbo_target *t = &self->targets[target];
+    t->multisample = true;
+    t->samples = samples;
+    t->fixedsamplelocs = fixed;
 }
 
 GLuint tgl_fbo_getTex(tgl_fbo *self, unsigned target)
 {
     assert(target < self->num);
     return self->textures[target];
+}
+
+void tgl_fbo_bindTex(tgl_fbo *self, unsigned target)
+{
+    assert(target < self->num);
+    glBindTexture(self->targets[target].target, self->textures[target]);
 }
 
 void tgl_fbo_bind(tgl_fbo *self, enum tgl_fbo_type type)
@@ -140,10 +157,16 @@ bool tgl_fbo_build(tgl_fbo *self, unsigned w, unsigned h)
     for (i = 0; i < self->num; i++) {
         tgl_fbo_target *t = self->targets + i;
         glBindTexture(t->target, self->textures[i]);
-        glTexImage2D(t->target, 0, t->fmt,
-                     t->awidth + t->rwidth*w,
-                     t->aheight + t->rheight*h,
-                     0, t->fmt, GL_UNSIGNED_BYTE, NULL);
+        unsigned tw = t->awidth + t->rwidth * w;
+        unsigned th = t->aheight + t->rheight * h;
+        if (t->multisample) {
+            glTexImage2DMultisample(t->target, t->samples, t->fmt,
+                                    tw, th, t->fixedsamplelocs);
+        } else {
+            glTexImage2D(t->target, 0, t->fmt,
+                         tw, th, 0, t->fmt,
+                         GL_UNSIGNED_BYTE, NULL);
+        }
         glFramebufferTexture2D(GL_FRAMEBUFFER, t->attach, t->target, self->textures[i], 0);
     }
 

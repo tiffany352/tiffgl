@@ -4,8 +4,9 @@
 #include <stdbool.h>
 
 typedef struct tgl_fbo_target {
-    GLenum target, fmt, attach;
-    unsigned awidth, aheight;
+    GLenum target, fmt, ifmt, attach;
+    unsigned awidth, aheight, samples;
+    bool multisample, fixedsamplelocs;
     float rwidth, rheight;
 } tgl_fbo_target;
 
@@ -29,8 +30,10 @@ void tgl_fbo_free(tgl_fbo *fbo);
 void tgl_fbo_numTargets(tgl_fbo *self, unsigned num);
 void tgl_fbo_size_abs(tgl_fbo *self, unsigned target, unsigned w, unsigned h);
 void tgl_fbo_size_rel(tgl_fbo *self, unsigned target, float w, float h);
-void tgl_fbo_texture(tgl_fbo *self, unsigned target, GLenum type, GLenum fmt, GLenum attachment);
+void tgl_fbo_texture(tgl_fbo *self, unsigned target, GLenum type, GLenum ifmt, GLenum fmt, GLenum attachment);
+void tgl_fbo_multisample(tgl_fbo *self, unsigned target, unsigned samples, bool fixed);
 GLuint tgl_fbo_getTex(tgl_fbo *self, unsigned target);
+void tgl_fbo_bindTex(tgl_fbo *self, unsigned target);
 void tgl_fbo_bind(tgl_fbo *self, enum tgl_fbo_type type);
 void tgl_fbo_swap(tgl_fbo *self, unsigned target1, unsigned target2);
 void tgl_fbo_bind_with(tgl_fbo *self, enum tgl_fbo_type type, unsigned n, const unsigned *order);
