@@ -21,18 +21,30 @@ endif
 ifdef AR
 AR = @(AR)
 else
-AR = ar
+AR = ar rcs
+endif
+
+ifdef PKG_CONFIG
+PKG_CONFIG = @(PKG_CONFIG)
+else
+PKG_CONFIG = pkg-config
+endif
+
+ifdef PROG_SUFFIX
+PROG_SUFFIX = @(PROG_SUFFIX)
+else
+PROG_SUFFIX =
 endif
 
 TOP = $(TUP_CWD)
 
-CCFLAGS += -Wall -Wextra -pedantic @(CCFLAGS)
+CCFLAGS = -Wall -Wextra -pedantic @(CCFLAGS)
 
-CXXFLAGS += -std=c++11 @(CXXFLAGS)
+CXXFLAGS = -std=c++11 @(CXXFLAGS)
 
-CFLAGS += `pkg-config --cflags glew` -std=c99 @(CFLAGS)
+CFLAGS = `$(PKG_CONFIG) --cflags glew` -std=c99 @(CFLAGS)
 
-LDFLAGS += `pkg-config --libs glew` @(LDFLAGS)
+LDFLAGS = `$(PKG_CONFIG) --libs glew` @(LDFLAGS)
 
 ifeq ($(CXX),clang++)
   CXXFLAGS += -fcolor-diagnostics
@@ -41,4 +53,4 @@ endif
 !cxx = |> ^o C++ %f^ $(CXX) $(CXXFLAGS) $(CCFLAGS) -c %f -o %o |> %B.o | $(TOP)/<objs>
 !cc = |> ^o C %f^ $(CC) $(CFLAGS) $(CCFLAGS) -c %f -o %o |> %B.o | $(TOP)/<objs>
 !ld = |> ^o LINK %o^ $(LD) %f $(LDFLAGS) -o %o |>
-!ar = |> ^o LINK %o^ $(AR) rcs %o %f |>
+!ar = |> ^o LINK %o^ $(AR) %o %f |>
