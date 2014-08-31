@@ -1,4 +1,4 @@
-#include <GL/glew.h>
+#include "tgl/gl.h"
 
 #include "vao.h"
 

@@ -1,18 +1,18 @@
 #ifndef TGL_H
 #define TGL_H
 
-#include <GL/glew.h>
 #include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include "glutil.h"
-#include "shader.h"
-#include "vao.h"
-#include "quad.h"
-#include "fbo.h"
+#include "tgl/gl.h"
+#include "tgl/glutil.h"
+#include "tgl/shader.h"
+#include "tgl/vao.h"
+#include "tgl/quad.h"
+#include "tgl/fbo.h"
 
 #ifdef __cplusplus
 }

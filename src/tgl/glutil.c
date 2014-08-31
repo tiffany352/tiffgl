@@ -1,7 +1,8 @@
-#include <GL/glew.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
+
+#include "tgl/gl.h"
 
 #include "glutil.h"
 

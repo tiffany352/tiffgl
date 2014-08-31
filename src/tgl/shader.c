@@ -1,6 +1,7 @@
-#include <GL/glew.h>
 #include <stdbool.h>
 #include <assert.h>
+
+#include "tgl/gl.h"
 
 #include "glutil.h"
 #include "shader.h"

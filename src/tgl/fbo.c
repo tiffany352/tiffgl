@@ -1,7 +1,8 @@
-#include <GL/glew.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+
+#include "tgl/gl.h"
 
 #include "glutil.h"
 #include "fbo.h"

@@ -36,9 +36,15 @@ else
 PROG_SUFFIX =
 endif
 
+ifdef LOADER
+LOADER = @(LOADER)
+else
+LOADER = GLEW
+endif
+
 TOP = $(TUP_CWD)
 
-CCFLAGS = -Wall -Wextra -pedantic @(CCFLAGS)
+CCFLAGS = -Wall -Wextra -pedantic -DTGL_USE_$(LOADER) -Isrc @(CCFLAGS)
 
 CXXFLAGS = -std=c++11 @(CXXFLAGS)
 

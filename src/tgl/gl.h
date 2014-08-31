@@ -1,0 +1,12 @@
+#ifndef TGL_GL_H
+#define TGL_GL_H
+
+#ifdef TGL_USE_GLEW
+#include <GL/glew.h>
+#define TGL_EXTENSION(n) GLEW_##n
+#elif defined(TGL_USE_EPOXY)
+#include <epoxy/gl.h>
+#define TGL_EXTENSION(n) epoxy_has_gl_extension("GL_" #n)
+#endif
+
+#endif
