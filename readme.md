@@ -1,6 +1,6 @@
 # TiffGL
 
-This is my abstraction layer for OpenGL. It was refactored out of [IntenseLogic](https://github.com/TheCodeLab/IntenseLogic) to serve my fork of [SUI](https://github.com/TheCamoy/SUI)'s GL needs.
+This is my abstraction layer for OpenGL. It was refactored out of [IntenseLogic](https://github.com/TheCodeLab/IntenseLogic) to serve my fork of [SUI](https://github.com/Camoy/SUI)'s GL needs.
 
 # License
 
