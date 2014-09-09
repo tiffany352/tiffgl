@@ -1,12 +1,13 @@
 #include <stdbool.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "tgl/gl.h"
 
 #include "glutil.h"
 #include "shader.h"
 
-bool tgl_make_shader(GLuint *shader, GLenum type, const char *source, size_t len)
+bool tgl_make_shader(GLuint *shader, GLenum type, const char *source, size_t len, char **error)
 {
     assert(source);
     tgl_check("Unknown");
@@ -24,14 +25,14 @@ bool tgl_make_shader(GLuint *shader, GLenum type, const char *source, size_t len
     glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
     glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &infolen);
     if (infolen > 1) {
-        char str[infolen];
-        glGetShaderInfoLog(*shader, infolen, NULL, str);
-        tgl_log("%s Shader info log: %s", type == GL_VERTEX_SHADER? "Vertex" : "Fragment", str);
+        *error = malloc(infolen);
+        glGetShaderInfoLog(*shader, infolen, NULL, *error);
+        //tgl_log("%s Shader info log: %s", type == GL_VERTEX_SHADER? "Vertex" : "Fragment", str);
     }
     return status == GL_TRUE;
 }
 
-bool tgl_link_program(GLuint program)
+bool tgl_link_program(GLuint program, char **error)
 {
     glLinkProgram(program);
     tgl_check("glLinkProgram");
@@ -40,9 +41,9 @@ bool tgl_link_program(GLuint program)
     glGetProgramiv(program, GL_LINK_STATUS, &status);
     glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
     if (len > 1) {
-        char str[len];
-        glGetProgramInfoLog(program, len, NULL, str);
-        tgl_log("Program info log: %s", str);
+        *error = malloc(len);
+        glGetProgramInfoLog(program, len, NULL, *error);
+        //tgl_log("Program info log: %s", str);
     }
     if (status == GL_FALSE) {
         return false;
@@ -54,12 +55,9 @@ bool tgl_link_program(GLuint program)
     glGetProgramiv(program, GL_LINK_STATUS, &status);
     glGetProgramiv(program, GL_INFO_LOG_LENGTH, &len);
     if (len > 1) {
-        char str[len];
-        glGetProgramInfoLog(program, len, NULL, str);
-        tgl_log("Program info log: %s", str);
+        *error = malloc(len);
+        glGetProgramInfoLog(program, len, NULL, *error);
+        //tgl_log("Program info log: %s", str);
     }
-    if (status == GL_FALSE) {
-        return false;
-    }
-    return true;
+    return status == GL_TRUE;
 }
