@@ -42,15 +42,28 @@ else
 LOADER = EPOXY
 endif
 
+ifeq ($(LOADER),GLEW)
+LOADER_PKG = glew
+endif
+ifeq ($(LOADER),EPOXY)
+LOADER_PKG = epoxy
+endif
+
+ifdef LOADER_CFLAGS
+LOADER_CFLAGS = @(LOADER_CFLAGS)
+else
+LOADER_CFLAGS = `$(PKG_CONFIG) $(LOADER_PKG) --cflags`
+endif
+
 TOP = $(TUP_CWD)
 
 CCFLAGS = -Wall -Wextra -pedantic -DTGL_USE_$(LOADER) -Isrc @(CCFLAGS)
 
 CXXFLAGS = -std=c++11 @(CXXFLAGS)
 
-CFLAGS = `$(PKG_CONFIG) --cflags glew` -std=c99 @(CFLAGS)
+CFLAGS = $(LOADER_CFLAGS) -std=c99 @(CFLAGS)
 
-LDFLAGS = `$(PKG_CONFIG) --libs glew` @(LDFLAGS)
+LDFLAGS = @(LDFLAGS)
 
 ifeq ($(CXX),clang++)
   CXXFLAGS += -fcolor-diagnostics
