@@ -57,7 +57,7 @@ endif
 
 TOP = $(TUP_CWD)
 
-CCFLAGS = -Wall -Wextra -pedantic -DTGL_USE_$(LOADER) -Isrc @(CCFLAGS)
+CCFLAGS = -Wall -Wextra -pedantic -DTGL_USE_$(LOADER) -Isrc $(LOADER_CFLAGS) @(CCFLAGS)
 
 CXXFLAGS = -std=c++11 @(CXXFLAGS)
 
