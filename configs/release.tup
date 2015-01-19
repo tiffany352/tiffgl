@@ -1,2 +1,2 @@
-CONFIG_CCFLAGS=-flto -march=native -O3
-CONFIG_LDFLAGS=-flto -match=native -O3
+CONFIG_CCFLAGS=-flto -march=native -O3 `pkg-config --cflags gl epoxy`
+CONFIG_LDFLAGS=-flto -match=native -O3 `pkg-config --libs gl epoxy`

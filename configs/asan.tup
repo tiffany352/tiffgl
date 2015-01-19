@@ -1,2 +1,2 @@
-CONFIG_CCFLAGS=-g -O0 -fsanitize=address,undefined
-CONFIG_LDFLAGS=-g -O0 -fsanitize=address,undefined
+CONFIG_CCFLAGS=-g -O0 -fsanitize=address,undefined -DTGL_USE_EPOXY `pkg-config --cflags gl epoxy`
+CONFIG_LDFLAGS=-g -O0 -fsanitize=address,undefined -DTGL_USE_EPOXY `pkg-config --libs gl epoxy`

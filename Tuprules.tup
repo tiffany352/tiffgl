@@ -24,46 +24,21 @@ else
 AR = ar rcs
 endif
 
-ifdef PKG_CONFIG
-PKG_CONFIG = @(PKG_CONFIG)
-else
-PKG_CONFIG = pkg-config
-endif
-
 ifdef PROG_SUFFIX
 PROG_SUFFIX = @(PROG_SUFFIX)
 else
 PROG_SUFFIX =
 endif
 
-ifdef LOADER
-LOADER = @(LOADER)
-else
-LOADER = EPOXY
-endif
-
-ifeq ($(LOADER),GLEW)
-LOADER_PKG = glew
-endif
-ifeq ($(LOADER),EPOXY)
-LOADER_PKG = epoxy
-endif
-
-ifdef LOADER_CFLAGS
-LOADER_CFLAGS = @(LOADER_CFLAGS)
-else
-LOADER_CFLAGS = `$(PKG_CONFIG) $(LOADER_PKG) --cflags`
-endif
-
 TOP = $(TUP_CWD)
 
-CCFLAGS = -Wall -Wextra -pedantic -DTGL_USE_$(LOADER) -Isrc $(LOADER_CFLAGS) @(CCFLAGS)
+CCFLAGS += -Wall -Wextra -pedantic -I$(TOP)/src @(CCFLAGS)
 
-CXXFLAGS = -std=c++11 @(CXXFLAGS)
+CXXFLAGS += -std=c++11 @(CXXFLAGS)
 
-CFLAGS = $(LOADER_CFLAGS) -std=c99 @(CFLAGS)
+CFLAGS += $(LOADER_CFLAGS) -std=c99 @(CFLAGS)
 
-LDFLAGS = @(LDFLAGS)
+LDFLAGS += @(LDFLAGS)
 
 ifeq ($(CXX),clang++)
   CXXFLAGS += -fcolor-diagnostics
