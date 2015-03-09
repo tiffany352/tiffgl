@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "tgl/gl.h"
 
@@ -98,7 +99,8 @@ void tgl_fbo_bind(tgl_fbo *self, enum tgl_fbo_type type)
     } else if (type == TGL_FBO_WRITE) {
         target = GL_DRAW_FRAMEBUFFER;
     } else {
-        assert(!"Invalid enum value");
+        fprintf(stderr, "Invalid enum value");
+        abort();
     }
     glBindFramebuffer(target, self->fbo);
     if (type == TGL_FBO_READ) {
@@ -124,7 +126,8 @@ void tgl_fbo_bind_with(tgl_fbo *self, enum tgl_fbo_type type,  unsigned n, const
     } else if (type == TGL_FBO_WRITE) {
         target = GL_DRAW_FRAMEBUFFER;
     } else {
-        assert(!"Invalid enum value");
+        fprintf(stderr, "Invalid enum value");
+        abort();
     }
     glBindFramebuffer(target, self->fbo);
     if (type == TGL_FBO_READ) {
