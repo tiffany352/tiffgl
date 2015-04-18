@@ -168,7 +168,6 @@ bool tgl_fbo_build(tgl_fbo *self, unsigned w, unsigned h)
             glTexImage2DMultisample(t->target, t->samples, t->fmt,
                                     tw, th, t->fixedsamplelocs);
         } else {
-            tgl_log("Format: %u %u %u %u", t->ifmt, t->fmt, t->type, i);
             glTexImage2D(t->target, 0, t->ifmt,
                          tw, th, 0, t->fmt,
                          t->type, NULL);
