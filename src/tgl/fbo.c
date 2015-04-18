@@ -54,13 +54,14 @@ void tgl_fbo_size_rel(tgl_fbo *self, unsigned target, float w, float h)
     self->targets[target].rheight = h;
 }
 
-void tgl_fbo_texture(tgl_fbo *self, unsigned target, GLenum type, GLenum ifmt, GLenum fmt, GLenum attachment)
+void tgl_fbo_texture(tgl_fbo *self, unsigned id, GLenum target, GLenum ifmt, GLenum fmt, GLenum attachment, GLenum type)
 {
-    assert(target < self->num);
-    tgl_fbo_target *t = &self->targets[target];
-    t->target = type;
+    assert(id < self->num);
+    tgl_fbo_target *t = &self->targets[id];
+    t->target = target;
     t->ifmt = ifmt;
     t->fmt = fmt;
+    t->type = type;
     t->attach = attachment;
 }
 
@@ -167,9 +168,10 @@ bool tgl_fbo_build(tgl_fbo *self, unsigned w, unsigned h)
             glTexImage2DMultisample(t->target, t->samples, t->fmt,
                                     tw, th, t->fixedsamplelocs);
         } else {
-            glTexImage2D(t->target, 0, t->fmt,
+            tgl_log("Format: %u %u %u %u", t->ifmt, t->fmt, t->type, i);
+            glTexImage2D(t->target, 0, t->ifmt,
                          tw, th, 0, t->fmt,
-                         GL_UNSIGNED_BYTE, NULL);
+                         t->type, NULL);
         }
         glFramebufferTexture2D(GL_FRAMEBUFFER, t->attach, t->target, self->textures[i], 0);
     }
