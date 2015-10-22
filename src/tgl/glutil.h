@@ -1,6 +1,10 @@
 #ifndef TGL_GLUTIL_H
 #define TGL_GLUTIL_H
 
+#if defined(_MSC_VER) && !defined(__func__)
+#define __func__ __FUNCTION__
+#endif
+
 typedef void (*tgl_log_fn)(const char *file, int line, const char *func, const char *msg, void *user);
 
 const char * tgl_strerror(GLenum err);

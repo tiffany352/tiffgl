@@ -88,7 +88,7 @@ void tgl_fbo_bindTex(tgl_fbo *self, unsigned target)
 
 void tgl_fbo_bind(tgl_fbo *self, enum tgl_fbo_type type)
 {
-    GLenum drawbufs[self->num], target;
+    GLenum *drawbufs = calloc(self->num, sizeof(GLenum)), target;
     unsigned i;
     for (i = 0; i < self->num; i++) {
         drawbufs[i] = self->targets[i].attach;
@@ -109,11 +109,12 @@ void tgl_fbo_bind(tgl_fbo *self, enum tgl_fbo_type type)
     } else {
         glDrawBuffers(self->num, drawbufs);
     }
+    free(drawbufs);
 }
 
-void tgl_fbo_bind_with(tgl_fbo *self, enum tgl_fbo_type type,  unsigned n, const unsigned *order)
+void tgl_fbo_bind_with(tgl_fbo *self, enum tgl_fbo_type type, unsigned n, const unsigned *order)
 {
-    GLenum drawbufs[n], target;
+    GLenum *drawbufs = calloc(n, sizeof(GLenum)), target;
     unsigned i;
     for (i = 0; i < n; i++) {
         unsigned id = order[i];
@@ -136,7 +137,7 @@ void tgl_fbo_bind_with(tgl_fbo *self, enum tgl_fbo_type type,  unsigned n, const
     } else {
         glDrawBuffers(n, drawbufs);
     }
-
+    free(drawbufs);
 }
 
 void tgl_fbo_swap(tgl_fbo *self, unsigned target1, unsigned target2)
@@ -162,8 +163,8 @@ bool tgl_fbo_build(tgl_fbo *self, unsigned w, unsigned h)
     for (i = 0; i < self->num; i++) {
         tgl_fbo_target *t = self->targets + i;
         glBindTexture(t->target, self->textures[i]);
-        unsigned tw = t->awidth + t->rwidth * w;
-        unsigned th = t->aheight + t->rheight * h;
+        unsigned tw = (unsigned)(t->awidth + t->rwidth * w);
+        unsigned th = (unsigned)(t->aheight + t->rheight * h);
         if (t->multisample) {
             glTexImage2DMultisample(t->target, t->samples, t->fmt,
                                     tw, th, t->fixedsamplelocs);
